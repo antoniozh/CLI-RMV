@@ -7,13 +7,13 @@ The idea behind this app is based on the frustration of spending to much time on
 # Usage
 
 Print the next connections from `Darmstadt Schloß` to `Darmstadt Hauptbahnhof`  
-`./bash-RMV.py -O "Darmstadt Schloß" -D "Darmstadt Hauptbahnhof"`
+`./bash_RMV.py -O "Darmstadt Schloß" -D "Darmstadt Hauptbahnhof"`
 
 Print the next connections from `Darmstadt Schloß` to `Darmstadt Hauptbahnhof` with `departure` at around `12:00`  
-`./bash-RMV.py -O "Darmstadt Schloß" -D "Darmstadt Hauptbahnhof" -d 12:00`
+`./bash_RMV.py -O "Darmstadt Schloß" -D "Darmstadt Hauptbahnhof" -d 12:00`
 
 Print the next connections from `Darmstadt Schloß` to `Darmstadt Hauptbahnhof`  with `arrival` at around `12:00`  
-`./bash-RMV.py -O "Darmstadt Schloß" -D "Darmstadt Hauptbahnhof" -a 12:00`
+`./bash_RMV.py -O "Darmstadt Schloß" -D "Darmstadt Hauptbahnhof" -a 12:00`
 
 
 # connections.ini
@@ -26,11 +26,58 @@ To **overcome redundancy** with your everyday connections you can save `connecti
 
 and use it on the terminal
 
-`./bash-RMV.py -c work`
+`./bash_RMV.py -c work`
 
 or  
 
-`./bash-RMV.py -c work -d 14:00`
+`./bash_RMV.py -c work -d 14:00`
+
+# outcome
+
+`./bash_RMV.py -c work -d 14:00` would produce the following outcome.
+
+
+    ------------------------------------------------
+
+    from:	Dieburg Hochschule Süd
+    to:	  Darmstadt Jugendstilbad
+
+
+    dep.:	13:50
+    arr.:	14:42
+    dur.:	0:52
+
+
+    trans.:	Bus K 68, RB 75, Tram 6, Bus K 55
+
+    ------------------------------------------------
+
+    from:	Dieburg Hochschule Süd
+    to:	  Darmstadt Jugendstilbad
+
+
+    dep.:	14:19
+    arr.:	14:43
+    dur.:	0:24
+
+
+    trans.:	Bus 671
+
+    ------------------------------------------------
+
+    from:	Dieburg Hochschule Süd
+    to:	  Darmstadt Jugendstilbad
+
+
+    dep.:	14:49
+    arr.:	15:13
+    dur.:	0:24
+
+
+    trans.:	Bus 671
+
+    ------------------------------------------------
+
 
 
 
