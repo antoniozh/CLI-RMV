@@ -1,29 +1,11 @@
-#! /usr/bin/python3
+# ------------------------------------------------------------------------------
 
 import re
-import json
-import requests
 from bs4 import BeautifulSoup
-from tabulate import tabulate
-from datetime import datetime, time
-from urllib import parse
+import requests
+import web_request
 
-headers = {'content-type': 'application/x-www-form-urlencoded'}
-url = 'http://www.rmv.de/auskunft/bin/jp/query.exe/dn?OK#focus'
-
-
-def pprint(connections):
-    print("------------------------------------------------\n")
-    for conn in connections:
-        print("from:\t{0}".format(conn['origin']))
-        print("to:\t{0}".format(conn['dest']))
-        print('\n')
-        print("dep.:\t{0}".format(conn['dep']))
-        print("arr.:\t{0}".format(conn['arr']))
-        print("dur.:\t{0}".format(conn['duration']))
-        print('\n')
-        print("trans.:\t{0}".format(', '.join(conn['trans'])))
-        print("\n------------------------------------------------\n")
+# ------------------------------------------------------------------------------
 
 
 def get_origin_dest(html):
@@ -44,7 +26,7 @@ def get_time(html):
         res = html.find('td', {'class': 'time'}).find('div', {'class': 'planed'})
     except:
         print("Error during get_time")
-    if(len(res) == None):
+    if(len(res) is None):
         raise Exception("Too few or to many td's found in get_time")
     time = res.text.strip()
     try:
@@ -85,9 +67,16 @@ def get_transportation(html):
     return trans
 
 
-def get_plan(soup):
-    connections = []
-    for tr in soup.findAll('tr', {'id': re.compile('trOverviewC0-*')}):
+def get_html(origin, dest, time, da):
+    html = web_request.get_html(origin, dest, time, da)
+    return html
+
+
+def get_plan(origin, dest, time, da):
+    html = get_html(origin, dest, time, da)
+    html = BeautifulSoup(html, 'html.parser')
+    plan = []
+    for tr in html.findAll('tr', {'id': re.compile('trOverviewC0-*')}):
         connection = {}
         origin, dest = get_origin_dest(tr)
         connection['origin'] = origin
@@ -99,21 +88,5 @@ def get_plan(soup):
         connection['duration'] = duration
         trans = get_transportation(tr)
         connection['trans'] = trans
-        connections.append(connection)
-    pprint(connections)
-
-
-if __name__ == '__main__':
-    data = {'start': 1, 'isUserTime': 'yes', 'timesel': 'depart'}
-    s = "Dieburg+Hochschule+S%C3%BCd"
-    # data['S'] = parse.quote(s)
-    data['S'] = s
-    z = "Darmstadt+Schlo%C3%9F"
-    # data['Z'] = parse.quote(z)
-    data['Z'] = z
-    t = time.strftime(datetime.now().time(), "%H:%M")
-    data['time'] = parse.quote(t)
-    res = requests.post(url, data=data)
-    html = res.text
-    soup = BeautifulSoup(html, 'html.parser')
-    get_plan(soup)
+        plan.append(connection)
+    return plan
